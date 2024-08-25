@@ -1,16 +1,49 @@
-import React, {useState} from 'react'
-import getAllPhotos from './Photos'
-import getPhoto from './Photo'
+import React, {useState, useEffect} from 'react'
+import axios from 'axios'
+import Card from './Card'
+
+
+const api_key = 'DEMO_KEY'
+const URL = `https://api.nasa.gov/planetary/apod?api_key=${api_key}`
+
+
 
 function App() {
+  const [apod, setApod] = useState()
+
+  useEffect (() => {
+    function getPhoto() {
+      axios.get(URL)
+      .then(res => {
+        console.log(res.data)
+        setApod(res.data)
+      })
+      .catch(err => {
+        console.log(err)
+      })
+    }
+    // getPhoto()
+    setApod({
+        "date": "2024-08-25",
+        "explanation": "Do underground oceans vent through canyons on Saturn's moon Enceladus?  Long features dubbed tiger stripes are known to be spewing ice from the moon's icy interior into space, creating a cloud of fine ice particles over the moon's South Pole and creating Saturn's mysterious E-ring.  Evidence for this has come from the robot Cassini spacecraft that orbited Saturn from 2004 to 2017.  Pictured here, a high resolution image of Enceladus is shown from a close flyby.  The unusual surface features dubb...",
+        "hdurl": "https://apod.nasa.gov/apod/image/2408/EnceladusStripes_Cassini_3237.jpg",
+        "media_type": "image",
+        "service_version": "v1",
+        "title": "Fresh Tiger Stripes on Saturn's Enceladus",
+        "url": "https://apod.nasa.gov/apod/image/2408/EnceladusStripes_Cassini_960.jpg"
+      })
+  }, [])
+
+  if (!apod) return 'Fetching Photo of the Day...'
   return (
-    <div>
-    <h1>Astronomy photo of the day</h1>
-    <p>
-      Read through the instructions in the README.md file to build your NASA
-      app! Have fun Photo Goes Here <span role="img" aria-label='go!'>🚀</span>!
-    </p>
-    </div>
+    <section>
+      <Card 
+      title={apod.title}
+      text={apod.explanation}
+      imageURL={apod.url}
+      date={apod.date}
+      />
+    </section>
   )
 }
 
