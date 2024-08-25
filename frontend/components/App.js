@@ -12,6 +12,7 @@ function App() {
   const [apod, setApod] = useState()
 
   useEffect (() => {
+    // eslint-disable-next-line no-unused-vars
     function getPhoto() {
       axios.get(URL)
       .then(res => {
